@@ -2,15 +2,18 @@ import { Button, Group, Stack, Text } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import { useNotes } from "../../features/notes/useNotes";
 import { useDebouncedValue } from "../../shared/hooks/useDebouncedValue";
+import { ConfirmModal } from "../../shared/ui/ConfirmModal";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { MarkdownView } from "./MarkdownView";
 
 export function Workspace() {
-  const { selectedNote, mode, setMode, updateNoteContent } = useNotes();
+  const { selectedNote, mode, setMode, updateNoteContent, deleteNote } =
+    useNotes();
 
   const noteId = selectedNote?.id ?? null;
 
   const [draftById, setDraftById] = useState<Record<string, string>>({});
+  const [deleteOpened, setDeleteOpened] = useState(false);
 
   const draft = useMemo(() => {
     if (!noteId) return "";
@@ -23,6 +26,12 @@ export function Workspace() {
   };
 
   const debouncedDraft = useDebouncedValue(draft, 500);
+
+  const handleDeleteConfirm = () => {
+    setDeleteOpened(false);
+    if (!noteId) return;
+    deleteNote(noteId);
+  };
 
   useEffect(() => {
     if (!noteId) return;
@@ -51,9 +60,19 @@ export function Workspace() {
 
         <Group>
           {mode === "view" ? (
-            <Button variant="light" onClick={() => setMode("edit")}>
-              Edit
-            </Button>
+            <>
+              <Button
+                color="red"
+                variant="light"
+                onClick={() => setDeleteOpened(true)}
+              >
+                Delete
+              </Button>
+
+              <Button variant="light" onClick={() => setMode("edit")}>
+                Edit
+              </Button>
+            </>
           ) : (
             <Button variant="light" onClick={() => setMode("view")}>
               View
@@ -67,6 +86,16 @@ export function Workspace() {
       ) : (
         <MarkdownEditor value={draft} onChange={setDraft} />
       )}
+      <ConfirmModal
+        opened={deleteOpened}
+        title="Delete note?"
+        description="This action cannot be undone."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        isDanger
+        onCancel={() => setDeleteOpened(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </Stack>
   );
 }

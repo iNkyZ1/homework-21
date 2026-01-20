@@ -1,73 +1,119 @@
-# React + TypeScript + Vite
+# homework-21
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание
 
-Currently, two official plugins are available:
+Одностраничное приложение (SPA) — упрощённая копия приложения **«Заметки» (macOS Notes)**, реализованная на **React + TypeScript**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Проект построен с упором на:
 
-## React Compiler
+- **React Router v6** и защищённые маршруты
+- **Context API** для управления состоянием
+- **кастомные хуки**
+- **Mantine** как дизайн-система
+- хранение данных в **IndexedDB (Dexie)**
+- **PWA**: установка и работа в **оффлайн-режиме**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Основной функционал
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Страница авторизации при запуске приложения
+- Доступ к заметкам только после успешной авторизации (protected route)
+- Интерфейс заметок:
+  - боковая панель со списком заметок
+  - поиск по заметкам (по частичному вхождению строки)
+  - рабочая область просмотра / редактирования
+- Просмотр заметки:
+  - отрендеренный **Markdown**
+  - кнопки **Delete** и **Edit**
+- Удаление заметки:
+  - подтверждение удаления через **Modal (Mantine)**
+- Редактирование:
+  - Markdown-редактор
+  - **автосохранение** контента (debounce)
+- Сохранение данных:
+  - **IndexedDB (Dexie)** — данные не теряются при перезагрузке
+- **PWA**:
+  - возможность установки приложения
+  - оффлайн-доступ к приложению и сохранённым заметкам
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Используемые технологии
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Vite**
+- **React 19**
+- **TypeScript**
+- **React Router v6**
+- **Mantine (UI / AppShell / Modal / Inputs)**
+- **Context API**
+- **Dexie (IndexedDB)**
+- **marked** (Markdown render)
+- **react-simplemde-editor + easymde** (Markdown editor)
+- **vite-plugin-pwa**
+- **Service Worker & Workbox**
+
+---
+
+## Архитектура
+
+Проект организован по принципу разделения на слои (упрощённо):
+
+- **pages** — страницы (Login, Notes)
+- **features** — бизнес-логика (auth, notes, storage)
+- **components** — UI-композиция (Sidebar, Workspace и т.д.)
+- **shared** — переиспользуемые утилиты и UI-компоненты (hooks, modals)
+
+---
+
+## Авторизация
+
+- Реализована через `features/auth`
+- Авторизация **клиентская** (без сервера): любые непустые `username/password` считаются валидными
+- Статус авторизации сохраняется в `localStorage`
+- Маршрут `/notes` защищён и доступен только авторизованному пользователю
+
+---
+
+## Хранение данных
+
+- Заметки хранятся в **IndexedDB** через библиотеку **Dexie**
+- При первом запуске выполняется seed демо-заметок (если база пустая)
+- После перезагрузки страницы заметки восстанавливаются из IndexedDB
+
+---
+
+## Поиск
+
+- Поиск выполняется по **частичному вхождению строки** (substring match)
+- Поиск регистронезависимый
+- Фильтрация применяется к содержимому заметки (`content`)
+
+---
+
+## PWA (Progressive Web App)
+
+Приложение поддерживает:
+
+- установку на устройство (Desktop / Android)
+- оффлайн-режим (доступна оболочка приложения и сохранённые заметки)
+- регистрацию Service Worker
+- манифест приложения (manifest)
+
+## Установка и запуск
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Сборка и запуск preview (для проверки PWA):
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run preview
 ```
+
+## Назначение проекта
+
+Проект создан в учебных целях.

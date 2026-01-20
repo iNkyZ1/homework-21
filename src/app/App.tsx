@@ -3,6 +3,7 @@ import { paths } from "./router/paths";
 import { ProtectedRoute } from "./router/ProtectedRoute";
 import { LoginPage } from "../pages/login/LoginPage";
 import { NotesPage } from "../pages/notes/NotesPage";
+import { NotesProvider } from "../features/notes/NotesProvider";
 
 export default function App() {
   return (
@@ -13,7 +14,9 @@ export default function App() {
         path={paths.notes}
         element={
           <ProtectedRoute>
-            <NotesPage />
+            <NotesProvider>
+              <NotesPage />
+            </NotesProvider>
           </ProtectedRoute>
         }
       />

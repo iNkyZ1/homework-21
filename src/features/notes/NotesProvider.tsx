@@ -1,19 +1,38 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { NotesContext } from "./notes.context";
-import { demoNotes } from "./model/demoNotes";
 import type { Note, WorkspaceMode } from "./model/types";
+import { ensureSeedNotes } from "./storage/seedNotes";
+import { deleteNoteById, getAllNotes, upsertNote } from "./storage/notesDb";
 
 type Props = {
   children: React.ReactNode;
 };
 
 export function NotesProvider({ children }: Props) {
-  const [notes, setNotes] = useState<Note[]>(() => demoNotes);
-  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(() =>
-    demoNotes.length > 0 ? demoNotes[0].id : null,
-  );
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [mode, setMode] = useState<WorkspaceMode>("view");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      await ensureSeedNotes();
+      const loaded = await getAllNotes();
+
+      if (cancelled) return;
+
+      setNotes(loaded);
+      setSelectedNoteId(
+        (prev) => prev ?? (loaded.length ? loaded[0].id : null),
+      );
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const selectedNote = useMemo(() => {
     if (!selectedNoteId) return null;
@@ -23,7 +42,6 @@ export function NotesProvider({ children }: Props) {
   const filteredNotes = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return notes;
-
     return notes.filter((n) => n.content.toLowerCase().includes(q));
   }, [notes, searchQuery]);
 
@@ -33,25 +51,36 @@ export function NotesProvider({ children }: Props) {
   }, []);
 
   const updateNoteContent = useCallback((id: string, content: string) => {
-    setNotes((prev) =>
-      prev.map((n) =>
-        n.id === id ? { ...n, content, updatedAt: Date.now() } : n,
-      ),
-    );
+    const updatedAt = Date.now();
+
+    setNotes((prev) => {
+      const next = prev.map((n) =>
+        n.id === id ? { ...n, content, updatedAt } : n,
+      );
+
+      const updated = next.find((n) => n.id === id);
+      if (updated) void upsertNote(updated);
+
+      return next;
+    });
   }, []);
 
-  const deleteNote = useCallback(
-    (id: string) => {
-      setNotes((prev) => prev.filter((n) => n.id !== id));
-      setMode("view");
-      setSelectedNoteId((prevSelected) => {
-        if (prevSelected !== id) return prevSelected;
-        const remaining = notes.filter((n) => n.id !== id);
-        return remaining.length ? remaining[0].id : null;
+  const deleteNote = useCallback((id: string) => {
+    setMode("view");
+
+    setNotes((prev) => {
+      const next = prev.filter((n) => n.id !== id);
+
+      setSelectedNoteId((current) => {
+        if (current !== id) return current;
+        return next.length ? next[0].id : null;
       });
-    },
-    [notes],
-  );
+
+      void deleteNoteById(id);
+
+      return next;
+    });
+  }, []);
 
   const value = useMemo(
     () => ({

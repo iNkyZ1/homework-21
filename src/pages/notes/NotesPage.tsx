@@ -1,23 +1,16 @@
-import { AppShell, Text } from "@mantine/core";
-import { useNotes } from "../../features/notes/useNotes";
+import { AppShell } from "@mantine/core";
+import { Sidebar } from "../../components/Sidebar/Sidebar";
+import { Workspace } from "../../components/Workspace/Workspace";
 
 export function NotesPage() {
-  const { filteredNotes, selectedNote } = useNotes();
-
   return (
     <AppShell navbar={{ width: 320, breakpoint: "sm" }} padding="md">
       <AppShell.Navbar p="md">
-        <Text fw={600}>Sidebar (stub)</Text>
-        <Text size="sm" c="dimmed">
-          Notes: {filteredNotes.length}
-        </Text>
+        <Sidebar />
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <Text fw={600}>Workspace (stub)</Text>
-        <Text size="sm" c="dimmed">
-          Selected: {selectedNote ? selectedNote.id : "none"}
-        </Text>
+        <Workspace />
       </AppShell.Main>
     </AppShell>
   );

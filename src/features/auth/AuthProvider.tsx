@@ -1,5 +1,8 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { getStoredAuth, setStoredAuth } from "./authStorage";
+import {
+  getStoredAuth,
+  setStoredAuth,
+} from "../../shared/lib/storage/authStorage";
 import { AuthContext } from "../../shared/model/auth/auth.context";
 import type {
   SignInPayload,

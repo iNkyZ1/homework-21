@@ -1,6 +1,6 @@
 import { AppShell } from "@mantine/core";
-import { NotesSidebar } from "../../widgets/notesSidebar/ui/NotesSidebar";
-import { NoteWorkspace } from "../../widgets/noteWorkspace/ui/NoteWorkspace";
+import { NotesSidebar } from "../../widgets/notesSidebar";
+import { NoteWorkspace } from "../../widgets/noteWorkspace";
 
 export function NotesPage() {
   return (

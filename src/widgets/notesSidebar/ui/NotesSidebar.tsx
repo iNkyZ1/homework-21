@@ -1,6 +1,5 @@
 import { Stack, Text } from "@mantine/core";
-import { useNotes } from "../../../entities/note/useNotes";
-import { getNoteTitle } from "../../../entities/note/model/getNoteTitle";
+import { useNotes, getNoteTitle } from "../../../entities/note";
 import { SearchBox } from "./SearchBox";
 import { ListItem } from "./ListItem";
 

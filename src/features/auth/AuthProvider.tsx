@@ -1,13 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
-import {
-  getStoredAuth,
-  setStoredAuth,
-} from "../../shared/lib/storage/authStorage";
-import { AuthContext } from "../../shared/model/auth/auth.context";
-import type {
-  SignInPayload,
-  AuthContextValue,
-} from "../../shared/model/auth/auth.context";
+import { getStoredAuth, setStoredAuth } from "../../shared/lib/storage";
+import { AuthContext } from "../../shared/model/auth";
+import type { SignInPayload, AuthContextValue } from "../../shared/model/auth";
 
 type Props = {
   children: React.ReactNode;

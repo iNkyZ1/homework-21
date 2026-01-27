@@ -1,7 +1,7 @@
 import { Button, Group, Stack, Text } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import { useNotes } from "../../features/notes/useNotes";
-import { useDebouncedValue } from "../../shared/hooks/useDebouncedValue";
+import { useDebouncedValue } from "../../shared/lib/hooks/useDebouncedValue";
 import { ConfirmModal } from "../../shared/ui/ConfirmModal";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { MarkdownView } from "./MarkdownView";

@@ -1,10 +1,10 @@
 import { Button, Group, Stack, Text } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
-import { useNotes } from "../../entities/note/useNotes";
-import { useDebouncedValue } from "../../shared/lib/hooks/useDebouncedValue";
-import { ConfirmModal } from "../../shared/ui/ConfirmModal";
-import { MarkdownEditor } from "../../widgets/noteWorkspace/ui/MarkdownEditor";
-import { MarkdownView } from "../../widgets/noteWorkspace/ui/MarkdownView";
+import { useNotes } from "../../../entities/note/useNotes";
+import { useDebouncedValue } from "../../../shared/lib/hooks/useDebouncedValue";
+import { ConfirmModal } from "../../../shared/ui/ConfirmModal";
+import { MarkdownEditor } from "./MarkdownEditor";
+import { MarkdownView } from "./MarkdownView";
 
 export function Workspace() {
   const { selectedNote, mode, setMode, updateNoteContent, deleteNote } =

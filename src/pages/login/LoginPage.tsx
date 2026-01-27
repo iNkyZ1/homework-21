@@ -1,7 +1,7 @@
 import { Button, Paper, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { paths } from "../../app/router/paths";
+import { paths } from "../../app/providers/router/paths";
 import { useAuth } from "../../features/auth/useAuth";
 
 export function LoginPage() {

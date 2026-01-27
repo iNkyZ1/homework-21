@@ -3,7 +3,7 @@ import { paths } from "./providers/router/paths";
 import { ProtectedRoute } from "./providers/router/ProtectedRoute";
 import { LoginPage } from "../pages/login/LoginPage";
 import { NotesPage } from "../pages/notes/NotesPage";
-import { NotesProvider } from "../features/notes/NotesProvider";
+import { NotesProvider } from "../entities/note/NotesProvider";
 
 export default function App() {
   return (

@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { paths } from "./paths";
-import { useAuth } from "../../features/auth/useAuth";
+import { useAuth } from "../../../features/auth/useAuth";
 
 type Props = {
   children: React.ReactNode;

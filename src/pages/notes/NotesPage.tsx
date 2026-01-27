@@ -1,16 +1,16 @@
 import { AppShell } from "@mantine/core";
-import { Sidebar } from "../../widgets/notesSidebar/ui/NotesSidebar";
-import { Workspace } from "../../widgets/noteWorkspace/ui/NoteWorkspace";
+import { NotesSidebar } from "../../widgets/notesSidebar/ui/NotesSidebar";
+import { NoteWorkspace } from "../../widgets/noteWorkspace/ui/NoteWorkspace";
 
 export function NotesPage() {
   return (
     <AppShell navbar={{ width: 320, breakpoint: "sm" }} padding="md">
       <AppShell.Navbar p="md">
-        <Sidebar />
+        <NotesSidebar />
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <Workspace />
+        <NoteWorkspace />
       </AppShell.Main>
     </AppShell>
   );

@@ -6,7 +6,7 @@ import { ConfirmModal } from "../../../shared/ui/ConfirmModal";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { MarkdownView } from "./MarkdownView";
 
-export function Workspace() {
+export function NoteWorkspace() {
   const { selectedNote, mode, setMode, updateNoteContent, deleteNote } =
     useNotes();
 

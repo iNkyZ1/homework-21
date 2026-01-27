@@ -4,7 +4,7 @@ import { getNoteTitle } from "../../../entities/note/model/getNoteTitle";
 import { SearchBox } from "./SearchBox";
 import { ListItem } from "./ListItem";
 
-export function Sidebar() {
+export function NotesSidebar() {
   const {
     filteredNotes,
     selectedNoteId,
